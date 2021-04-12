@@ -11,6 +11,15 @@ const bcrypt = require('bcrypt')
 const db = require('./database.js')
 let users = db.users
 
+let students = {
+    list:
+        [
+            { id: "6135512001", name: 'Kitti', surname: 'Noo', major: "CoE", GPA: 3.3 },
+            { id: "6135512002", name: 'John', surname: 'Lennon', major: "SE", GPA: 2.87 },
+
+        ]
+}
+
 require('./passport.js')
 
 const router = require('express').Router(),
@@ -22,6 +31,67 @@ router.use(cors({ origin: 'http://localhost:3000', credentials: true }))
 router.use(express.json())
 router.use(express.urlencoded({ extended: false }))
 
+//-----------------------------------------------------------------------------------------// 
+//Students
+
+router.route('/students')
+    .get((req, res) => res.json(students))
+    .post((req, res) => {
+        console.log(req.body)
+        //let id = (students.list.length)? students.list[students.list.length-1].id+1:1
+        let newStudent = {}
+        newStudent.id = (students.list.length) ? students.list[students.list.length-1].id+1 : 1
+        newStudent.name = req.body.name
+        newStudent.surname = req.body.surname
+        newStudent.major = req.body.major
+        newStudent.GPA  = req.body.GPA
+        students = { list: [...students.list, newStudent] }
+        res.json(students)
+    })
+
+router.route('/students/:student_id') //params
+    .get((req, res) => {
+        let id = students.list.findIndex((item) => (+item.id === +req.params.student_id))
+        
+        if (id === -1) {
+            res.send('Not Found')
+        }
+        else {
+            res.json(students.list[id])
+        }
+        
+
+    })
+    .put((req, res) => {
+        let id = students.list.findIndex((item) => (+item.id === +req.params.student_id))
+        if (id === -1) {
+            res.send('Not Found')
+        }
+        else {
+            students.list[id].name = req.body.name
+            students.list[id].surname = req.body.surname
+            students.list[id].major = req.body.major
+            students.list[id].GPA = req.body.GPA
+            res.json(students)
+        }
+
+
+    })
+    .delete((req, res) => {
+       
+        let id = students.list.findIndex((item) => (+item.id === +req.params.student_id))
+        if (id === -1) {
+            res.send('Not Found')
+        }
+        else {
+            students.list = students.list.filter((item) => +item.id !== +req.params.student_id)
+            res.json(students)
+        }
+    })
+
+
+//-----------------------------------------------------------------------------------------// 
+
 
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', { session: false }, (err, user, info) => {
@@ -29,7 +99,7 @@ router.post('/login', (req, res, next) => {
         if (err) return next(err)
         if (user) {
             const token = jwt.sign(user, db.SECRET, {
-                expiresIn: '1d'
+                expiresIn: (req.body.rememberme === "on") ?'7d' : '1d'
             })
             // req.cookie.token = token
             res.setHeader(

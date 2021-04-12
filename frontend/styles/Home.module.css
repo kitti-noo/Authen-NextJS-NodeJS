@@ -5,10 +5,17 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    /* border: 12px solid rgb(253, 176, 34); */
 }
-
+.center{
+    text-align: center;
+    font-size: 25px;
+}
 .content {
     min-width: 25vw;
+}
+.header{
+    font-size: 45px;
 }
 
 .gridContainer {

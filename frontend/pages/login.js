@@ -11,11 +11,12 @@ export default function Login({ token }) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [status, setStatus] = useState('')
+    const [rememberme, setRememberme] = useState('')
 
     const login = async (req, res) => {
         try {
             let result = await axios.post(`${config.URL}/login`,
-                { username, password },
+                { username, password,rememberme },
                 { withCredentials: true })
             console.log('result: ', result)
             console.log('result.data:  ', result.data)
@@ -69,12 +70,20 @@ export default function Login({ token }) {
                 </div>
                 <br/>
                 <div>
-                    Status:  {status}
+                    Status:  {status}  
+                    {/* RememberMe: {rememberme} */}
                 </div>
                 <br />
                 {loginForm()}
                 <div>
                     <button onClick={login}>Login</button>
+                    <br /><br />
+                </div>
+                <div>
+                    <input type="checkbox"
+                        name="RememberMe"
+                        onChange={ (e) => setRememberme(e.target.value)}
+                    />Remember me!
                 </div>
             </div>
         </Layout>
