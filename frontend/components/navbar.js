@@ -5,7 +5,7 @@ const Navbar = () => (
     <div className={styles.center}>
         <h1  className={styles.header}>Students Information</h1>
         <Link href="/"><a> Home </a></Link> |
-        <Link href="/editStudents"><a> Students </a></Link> |
+        <Link href="/showStudents"><a> Students </a></Link> |
         <Link href="/register"><a> Register </a></Link>  |
         <Link href="/login"><a> Login </a></Link> |
         <Link href="/profile"><a> Profile </a></Link> | 

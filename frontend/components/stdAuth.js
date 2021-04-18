@@ -6,8 +6,8 @@ const stdAuth= WrappedComponent => {
         const { token } = props
         const router = useRouter()
         useEffect(() => {
-            if (!token)
-                router.push('/showStudents')
+            if (token)
+                router.push('/editStudents')
         }, [token])
         return (<WrappedComponent {...props} />)
     }

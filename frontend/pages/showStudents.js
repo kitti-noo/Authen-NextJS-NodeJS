@@ -9,6 +9,7 @@ import config from '../config/config'
 
 
 const URL = `${config.URL}/students`
+
 const showStudents = ({ token }) => {
 
     const [students, setStudents] = useState( {
@@ -57,7 +58,6 @@ const showStudents = ({ token }) => {
         </Layout>
     )
 }
-
 export default stdAuth(showStudents)
 
 export function getServerSideProps({ req, res }) {
